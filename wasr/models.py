@@ -4,7 +4,7 @@ import torch
 from torch import nn
 from torchvision.models import segmentation
 from torchvision.models.resnet import resnet101, resnet50
-from torchvision.models.utils import load_state_dict_from_url
+from torch.hub import load_state_dict_from_url
 
 from .decoders import NoIMUDecoder, IMUDecoder
 from .utils import IntermediateLayerGetter

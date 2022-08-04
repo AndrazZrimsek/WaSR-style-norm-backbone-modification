@@ -128,10 +128,21 @@ def train_wasr(args):
 
         callbacks.append(ModelExporter())
 
+    # before: old pytorch.lightning
+    # trainer = pl.Trainer(logger=logger,
+    #                      gpus=args.gpus,
+    #                      max_epochs=args.epochs,
+    #                      accelerator='ddp',
+    #                      resume_from_checkpoint=args.resume_from,
+    #                      callbacks=callbacks,
+    #                      sync_batchnorm=True,
+    #                      log_every_n_steps=args.log_steps,
+    #                      precision=args.precision)
     trainer = pl.Trainer(logger=logger,
-                         gpus=args.gpus,
+                         devices=args.gpus,
                          max_epochs=args.epochs,
-                         accelerator='ddp',
+                         accelerator='cuda',
+                         strategy='ddp',
                          resume_from_checkpoint=args.resume_from,
                          callbacks=callbacks,
                          sync_batchnorm=True,

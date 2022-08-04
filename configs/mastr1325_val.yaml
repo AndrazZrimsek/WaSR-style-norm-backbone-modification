@@ -1,4 +1,4 @@
-image_dir: /../../datasets/images
-mask_dir: /../../datasets/masks
-imu_dir: /../../datasets/imus
+image_dir: /home/andraz/datasets/images
+mask_dir: /home/andraz/datasets/masks
+imu_dir: /home/andraz/datasets/imus
 image_list: val_images.txt
