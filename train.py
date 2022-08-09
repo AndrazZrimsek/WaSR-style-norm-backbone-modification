@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader
 import pytorch_lightning as pl
 from pytorch_lightning import loggers as pl_loggers
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
+# from pytorch_lightning.strategies.ddp import DDPStrategy
 
 
 import wasr.models as models
@@ -142,7 +143,7 @@ def train_wasr(args):
                          devices=args.gpus,
                          max_epochs=args.epochs,
                          accelerator='cuda',
-                         strategy='ddp',
+                         strategy='ddp_find_unused_parameters_false',
                          resume_from_checkpoint=args.resume_from,
                          callbacks=callbacks,
                          sync_batchnorm=True,

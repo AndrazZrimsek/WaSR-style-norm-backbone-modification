@@ -93,3 +93,4 @@ class ASPPv2(nn.Module):
         # Sum convolution results
         res = torch.stack(res).sum(0)
         return res
+
