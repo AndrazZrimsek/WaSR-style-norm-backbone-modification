@@ -78,21 +78,23 @@ def wasr_deeplabv2_resnet101_bin(num_classes=3, pretrained=False, imu=True):
     # Pretrained ResNet101 backbone
     backbone = resnet101(pretrained=True, replace_stride_with_dilation=[False, True, True])
 
-    print("before replace------------------------")
-    for name, param in model.layer1.named_parameters(): 
-        if param.requires_grad: 
-            print(name)
+    # print("before replace------------------------")y
+    # for name, param in backbone.layer1.named_parameters(): 
+    #     if param.requires_grad: 
+    #         print(name)
 
     norm_layer = BatchInstanceNorm2d
+    #replace_norm_layer(backbone, 'resnet101', 64, norm_layer, first=True)
+    setattr(backbone, "bn1", norm_layer(num_features=64, eps=1e-05, momentum=0.1, affine=True))
     replace_norm_layer(backbone.layer1, 'resnet101_layer1', 64, norm_layer)
     replace_norm_layer(backbone.layer2, 'resnet101_layer2', 128, norm_layer)
     replace_norm_layer(backbone.layer3, 'resnet101_layer3', 256, norm_layer)
     replace_norm_layer(backbone.layer4, 'resnet101_layer4', 512, norm_layer)
 
-    print("after replace-------------------------")
-    for name, param in model.layer1.named_parameters(): 
-        if param.requires_grad: 
-            print(name)
+    # print("after replace-------------------------")
+    # for name, param in backbone.layer1.named_parameters(): 
+    #     if param.requires_grad: 
+    #         print(name)
 
     return_layers = {
         'layer4': 'out',
@@ -120,10 +122,10 @@ def wasr_deeplabv2_resnet101_bin(num_classes=3, pretrained=False, imu=True):
 
         model.load_state_dict(state_dict, strict=False)
 
-    print("after load--------------------------------")
-    for name, param in model.layer1.named_parameters(): 
-        if param.requires_grad: 
-            print(name)
+    # print("after load--------------------------------")
+    # for name, param in model.backbone.layer1.named_parameters(): 
+    #     if param.requires_grad: 
+    #         print(name)
 
     return model
 

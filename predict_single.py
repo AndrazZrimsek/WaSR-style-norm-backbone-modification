@@ -17,7 +17,7 @@ SEGMENTATION_COLORS = np.array([
 ], np.uint8)
 
 BATCH_SIZE = 12
-ARCHITECTURE = 'wasr_resnet101_imu'
+ARCHITECTURE = 'wasr_resnet101_bin_imu'
 
 def get_arguments():
     """Parse all the arguments provided from the CLI.

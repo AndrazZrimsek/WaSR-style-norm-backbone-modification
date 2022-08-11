@@ -104,23 +104,31 @@ def tensor_map(obj, fn):
         raise TypeError("Invalid type for tensor_map")
 
 
-def replace_norm_layer(module, name, num_features1, norm_method=torch.nn.InstanceNorm2d):
+def replace_norm_layer(module, name, num_features1, norm_method=torch.nn.InstanceNorm2d, first=False):
     '''
     Recursively put desired batch norm in nn.module module.
 
     set module = net to start code.
     '''
-    # go through all attributes of module nn.module (e.g. network or layer) and put batch norms if present
-    for attr_str in dir(module):
-        target_attr = getattr(module, attr_str)
+    if first:
+    # if first normalization layer do not iterate, replace single normalization module named "bn1"
+        target_attr = getattr(module, "bn1")
         if type(target_attr) == torch.nn.BatchNorm2d:
             # new_bn = norm_method(num_features=num_features1, eps=1e-05, momentum=0.1, affine=True)
-            if attr_str == "bn3":
-              new_bn = norm_method(num_features=num_features1*4, eps=1e-05, momentum=0.1, affine=True)#, track_running_stats=True)
-            else:
-              new_bn = norm_method(num_features=num_features1, eps=1e-05, momentum=0.1, affine=True)#, track_running_stats=True)
-              pass
-            setattr(module, attr_str, new_bn)
+            new_bn = norm_method(num_features=num_features1, eps=1e-05, momentum=0.1, affine=True)
+            setattr(module, "bn1", new_bn)
+    else:
+        # go through all attributes of module nn.module (e.g. network or layer) and replace batch norms if present
+        for attr_str in dir(module):
+            target_attr = getattr(module, attr_str)
+            if type(target_attr) == torch.nn.BatchNorm2d:
+                # new_bn = norm_method(num_features=num_features1, eps=1e-05, momentum=0.1, affine=True)
+                if attr_str == "bn3":
+                    new_bn = norm_method(num_features=num_features1*4, eps=1e-05, momentum=0.1, affine=True)#, track_running_stats=True)
+                else:
+                    new_bn = norm_method(num_features=num_features1, eps=1e-05, momentum=0.1, affine=True)#, track_running_stats=True)
+                pass
+                setattr(module, attr_str, new_bn)
     parent_name = name
     # iterate through immediate child modules. Note, the recursion is done by our code no need to use named_modules()
     for name, immediate_child_module in module.named_children():

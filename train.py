@@ -149,7 +149,17 @@ def train_wasr(args):
                          sync_batchnorm=True,
                          log_every_n_steps=args.log_steps,
                          precision=args.precision)
+    
+    # with open('beforefit.txt', 'w') as f:
+    #     print(model.model.state_dict().keys(), file=f)
+    with open('modelbeforefit.txt', 'w') as f:
+        print(model.model, file=f)
+    
     trainer.fit(model, train_dl, val_dl)
+    # with open('afterfit.txt', 'w') as f:
+    #     print(model.model.state_dict().keys(), file=f)
+    with open('modelafterfit.txt', 'w') as f:
+        print(model.model, file=f)
 
 
 def main():
